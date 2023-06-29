@@ -31,13 +31,18 @@ export default {
                 if (!res.ok) {
                   throw new Error(`Endpoint down, status: ${res.status}`);
                 }
-                const body = await res.arrayBuffer();
+
+                const compressionStream = new CompressionStream("gzip")
+                const compressed = await new Response(
+                  res.body?.pipeThrough(compressionStream)
+                ).arrayBuffer()
+
 
                 const time = new Date(controller.scheduledTime)
 
-                const key = `station_status/${time.toISOString()}.json`
+                const key = `station_status/${time.toISOString()}.json.gz`
 
-                await env.DATA.put(key, body);
+                await env.DATA.put(key, compressed);
                 console.log("OK: Scrape done");
 	},
 };
