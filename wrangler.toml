@@ -8,5 +8,5 @@ bucket_name = "citibike-data-1"
 preview_bucket_name = "citibike-data-1-test"
 
 [triggers]
-crons = [ "1 * * * *" ]
+crons = [ "*/5 * * * *" ]
 
